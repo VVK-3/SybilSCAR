@@ -1,0 +1,52 @@
+
+###########################
+
+This is an example to show how SybilSCAR and SybilBelief can be used to perform Sybil detection in undirected social graphs.
+
+We use a real undirected social graph (i.e., Facebook) as the benign region. Moreover, we synthesize the Sybil region as a replicate of the benign region and add attack edges between the two regions uniformly at random. The Facebook dataset is from SNAP (http://snap.stanford.edu/data/index.html). It has 4,039 nodes and 88,234 edges. In this example, we add 1,000 attack edges. The final social graph with attack edges is "graph.txt". We randomly select 100 Sybils and 100 benign nodes to form the training dataset (train.txt). The remaining nodes form the testing dataset (test.txt).
+
+Step 0: Compile metric.cpp
+
+g++ metric.cpp -O3 -o metric
+
+
+#### Testing SybilSCAR ####
+
+
+Step 1: Compile SybilSCAR:
+
+g++ sybilscar.cpp -pthread -O3 -o sybilscar
+
+
+Step 2: Execute SybilSCAR:
+
+./sybilscar -graphfile Undirected_Facebook/graph.txt -trainfile Undirected_Facebook/train.txt -postfile Undirected_Facebook/post_SybilSCAR.txt -mIter 6 -tp 0.9 -tn 0.1 -wg 0 -wei 0.6 -nt 1 
+
+
+Step 3: Evaluate SybilSCAR:
+
+./metric -testfile Undirected_Facebook/test.txt -postfile Undirected_Facebook/post_SybilSCAR.txt
+
+
+
+#### Testing SybilBelief ####
+
+
+Step 1: Compile SybilBelief:
+
+g++ sybilbelief.cpp -O3 -o sybilbelief
+
+Step 2: Execute SybilBelief:
+
+./sybilbelief -graphfile Undirected_Facebook/graph.txt -trainfile Undirected_Facebook/train.txt -postfile Undirected_Facebook/post_SybilBelief.txt -mIter 6 -tp 0.9 -tn 0.1 -wei 0.9 -nt 1 
+
+Step 3: Evaluate SybilBelief:
+
+./metric -testfile Undirected_Facebook/test.txt -postfile Undirected_Facebook/post_SybilBelief.txt
+
+
+###########################
+
+
+
+
